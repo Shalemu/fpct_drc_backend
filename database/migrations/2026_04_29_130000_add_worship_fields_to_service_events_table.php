@@ -9,6 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('service_events', function (Blueprint $table) {
+            // Make original title nullable since frontend uses service_name instead
+            $table->string('title')->nullable()->change();
             $table->string('service_name')->nullable()->after('title');
             $table->string('preacher')->nullable()->after('description');
             $table->string('preacher_description')->nullable()->after('preacher');
