@@ -171,6 +171,42 @@ class LeaderController extends Controller
         ]);
     }
 
+   public function retired()
+{
+    $leaders = Leader::with(['user', 'roles'])
+        ->where('status', 'retired')
+        ->latest()
+        ->get();
+
+    $formatted = $leaders->map(fn ($leader) => [
+        'id'      => $leader->id,
+        'user_id' => $leader->user_id,
+        'name'    => $leader->user->full_name ?? $leader->full_name,
+        'email'   => $leader->user->email ?? $leader->email,
+        'phone'   => $leader->user->phone ?? $leader->phone,
+        'roles'   => $leader->roles->pluck('title'),
+        'status'  => $leader->status,
+    ]);
+
+    return response()->json([
+        'status'  => 'success',
+        'leaders' => $formatted,
+    ]);
+}
+
+public function restore($id)
+{
+    $leader = Leader::findOrFail($id);
+
+    $leader->update([
+        'status' => 'active'
+    ]);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Leader restored successfully'
+    ]);
+}
     /**
      * Remove leader
      * IMPORTANT: users.role is NOT modified

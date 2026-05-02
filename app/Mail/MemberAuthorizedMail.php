@@ -43,8 +43,6 @@ class MemberAuthorizedMail extends Mailable
 {
     return $this->subject('Membership Authorized')
 
-
-
       ->html("<p>Habari {$this->fullName},usajili wako FPCT Kurasini umekamilika. Namba yako ya ushirika ni {$this->membershipNumber} <br> Karibu FPCT Kurasini.</p>");
                 // ->html("<p>Hello {$this->fullName}, your membership number is {$this->membershipNumber}</p>");
         

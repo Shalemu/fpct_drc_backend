@@ -655,8 +655,8 @@ public function stats()
     // Send SMS
     if ($member->phone_number) {
         try {
-            $text = "Habari {$fullName}, usajili wako FPCT Kurasini umekamilika. "
-                  . "Namba yako ya ushirika ni: {$membershipNumber}. Karibu FPCT Kurasini.";
+            $text = "Habari {$fullName}, usajili wako  FPCT KASULU MJINI  umekamilika. "
+                  . "Namba yako ya ushirika ni: {$membershipNumber}. Karibu  FPCT KASULU MJINI .";
 
             app(SMSService::class)->sendSMS($member->phone_number, $text);
         } catch (\Throwable $e) {

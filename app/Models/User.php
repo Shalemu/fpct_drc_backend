@@ -130,8 +130,15 @@ class User extends Authenticatable
     }
 
 
-    public function setRoleAttribute(string $value)
+public function setRoleAttribute(?string $value)
 {
+    // allow pending users (NULL role)
+    if (is_null($value)) {
+        $this->attributes['role'] = null;
+        return;
+    }
+
+    // protect admin role from being overwritten
     if (
         isset($this->attributes['role']) &&
         $this->attributes['role'] === 'admin' &&

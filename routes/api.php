@@ -18,7 +18,10 @@ use App\Http\Controllers\Api\{
     GalleryController,
     UserSettingsController,
     UserRoleController,
-    ServiceEventController,
+   ServiceEventController,
+   AttendanceController,
+   ChildrenController
+
 };
 use App\Models\Attendance;
 
@@ -91,6 +94,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/leaders/{id}/restore', [LeaderController::class, 'restore']);
     Route::post('/leaders/{id}/retire', [LeaderController::class, 'retire']);
     Route::post('/leaders/{id}/update-role', [LeaderController::class, 'updateRole']);
+    Route::post('/leaders/{id}/retire', [LeaderController::class, 'retire']);
 
     // Leadership Roles
     Route::get('/leadership-roles', [LeadershipRoleController::class, 'index']);
