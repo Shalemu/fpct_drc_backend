@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\{
     GalleryController,
     UserSettingsController,
     UserRoleController,
+    ServiceEventController,
 };
 use App\Models\Attendance;
 
@@ -111,6 +112,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Service Events
     Route::apiResource('service-events', ServiceEventController::class);
+
+    // Children
+    Route::apiResource('children', ChildrenController::class);
 
 
 
