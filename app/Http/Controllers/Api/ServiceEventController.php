@@ -9,22 +9,23 @@ use Illuminate\Http\Request;
 class ServiceEventController extends Controller
 {
     /**
-     * Display a listing of service events, with optional search and category filtering.
+     * Get all service events with optional search and category filter
      */
     public function index(Request $request)
     {
         $query = ServiceEvent::query();
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->search;
+
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                  ->orWhere('service_name', 'like', '%' . $search . '%')
-                  ->orWhere('preacher', 'like', '%' . $search . '%');
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('service_name', 'like', "%{$search}%")
+                  ->orWhere('preacher', 'like', "%{$search}%");
             });
         }
 
-        if ($request->has('category') && $request->category !== 'All') {
+        if ($request->filled('category') && $request->category !== 'All') {
             $query->where('category', $request->category);
         }
 
@@ -35,32 +36,37 @@ class ServiceEventController extends Controller
     }
 
     /**
-     * Store a newly created service event.
+     * Store new service event
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'date' => 'required|date',
             'time' => 'nullable',
             'location' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
             'description' => 'nullable|string',
+
             'service_name' => 'required|string|max:255',
             'preacher' => 'nullable|string|max:255',
             'preacher_description' => 'nullable|string|max:500',
             'message' => 'nullable|string',
+
             'attendance_children' => 'nullable|integer|min:0',
             'attendance_women' => 'nullable|integer|min:0',
             'attendance_men' => 'nullable|integer|min:0',
+
             'total_offerings' => 'nullable|numeric|min:0',
             'leaders_on_duty' => 'nullable|string|max:255',
         ]);
 
-        // Auto-calculate total attendance
-        $validated['total_attendance'] = ($validated['attendance_children'] ?? 0)
-            + ($validated['attendance_women'] ?? 0)
-            + ($validated['attendance_men'] ?? 0);
+        // Safe defaults
+        $children = $validated['attendance_children'] ?? 0;
+        $women = $validated['attendance_women'] ?? 0;
+        $men = $validated['attendance_men'] ?? 0;
+
+        $validated['total_attendance'] = $children + $women + $men;
 
         $serviceEvent = ServiceEvent::create($validated);
 
@@ -72,7 +78,7 @@ class ServiceEventController extends Controller
     }
 
     /**
-     * Display the specified service event.
+     * Show single service event
      */
     public function show(ServiceEvent $serviceEvent)
     {
@@ -83,32 +89,37 @@ class ServiceEventController extends Controller
     }
 
     /**
-     * Update the specified service event.
+     * Update service event
      */
     public function update(Request $request, ServiceEvent $serviceEvent)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'date' => 'sometimes|required|date',
             'time' => 'nullable',
             'location' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
             'description' => 'nullable|string',
+
             'service_name' => 'sometimes|required|string|max:255',
             'preacher' => 'nullable|string|max:255',
             'preacher_description' => 'nullable|string|max:500',
             'message' => 'nullable|string',
+
             'attendance_children' => 'nullable|integer|min:0',
             'attendance_women' => 'nullable|integer|min:0',
             'attendance_men' => 'nullable|integer|min:0',
+
             'total_offerings' => 'nullable|numeric|min:0',
             'leaders_on_duty' => 'nullable|string|max:255',
         ]);
 
-        // Recalculate total attendance if any attendance field changed
-        $validated['total_attendance'] = ($validated['attendance_children'] ?? $serviceEvent->attendance_children)
-            + ($validated['attendance_women'] ?? $serviceEvent->attendance_women)
-            + ($validated['attendance_men'] ?? $serviceEvent->attendance_men);
+        // Recalculate attendance safely
+        $children = $validated['attendance_children'] ?? $serviceEvent->attendance_children ?? 0;
+        $women = $validated['attendance_women'] ?? $serviceEvent->attendance_women ?? 0;
+        $men = $validated['attendance_men'] ?? $serviceEvent->attendance_men ?? 0;
+
+        $validated['total_attendance'] = $children + $women + $men;
 
         $serviceEvent->update($validated);
 
@@ -120,7 +131,7 @@ class ServiceEventController extends Controller
     }
 
     /**
-     * Remove the specified service event.
+     * Delete service event
      */
     public function destroy(ServiceEvent $serviceEvent)
     {
@@ -128,7 +139,7 @@ class ServiceEventController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Service event deleted successfully.',
+            'message' => 'Service event imefutwa.',
         ]);
     }
 }
