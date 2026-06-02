@@ -41,7 +41,7 @@ class ServiceEventController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'date' => 'required|date',
             'time' => 'nullable',
             'location' => 'nullable|string|max:255',
@@ -94,7 +94,7 @@ class ServiceEventController extends Controller
     public function update(Request $request, ServiceEvent $serviceEvent)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'date' => 'sometimes|required|date',
             'time' => 'nullable',
             'location' => 'nullable|string|max:255',

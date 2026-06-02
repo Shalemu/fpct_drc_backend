@@ -16,7 +16,7 @@ return [
         'https://churchapp.co.tz',
         'https://fpctkasulumjini.kanisasoft.co.tz',
         // 'https://fpctchamwino.kanisasoft.co.tz',
-        // 'https://fpctkurasini.kanisasoft.co.tz',
+        // 'https://fpctdrc.kanisasoft.co.tz',
         'http://localhost:3000',
     ],
 
